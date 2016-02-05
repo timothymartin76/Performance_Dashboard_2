@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="../build/nv.d3.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+    <script src="../build/nv.d3.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        text {
+            font: 12px Lato;
+        }
+        svg {
+            display: block;
+        }
+        html, body, svg {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class='with-3d-shadow with-transitions'>
+
+<svg id="chart1"></svg>
+
+<script>
+
+    var histcatexplong = [
+        {
+            "key" : "Transferred to Agent" ,
+            "values" : [ [ 1406937600000 , 340000] , 
+			[ 1409616000000 , 320000] , 
+			[ 1412208000000 , 310000] , 
+			[ 1414886400000 , 360000] , 
+			[ 1417478400000 , 280500] , 
+			[ 1420156800000 , 265555] , 
+			[ 1422835200000 , 445555] , 
+			[ 1425254400000 , 406500] , 
+			[ 1427932800000 , 355600] , 
+			[ 1430524800000 , 325560] , 
+			[ 1433203200000 , 402580] , 
+			[ 1435795200000 , 325610] , 
+			[ 1438473600000 , 370000] , 
+			[ 1441152000000 , 425000]]
+        } ,
+		
+		 {
+            "key" : "Containment" ,
+            "values" : [ [ 1406937600000 , 45602] , 
+			[ 1409616000000 , 42500] , 
+			[ 1412208000000 , 49323] , 
+			[ 1414886400000 , 44421] , 
+			[ 1417478400000 , 52250] , 
+			[ 1420156800000 , 56521] , 
+			[ 1422835200000 , 75852] , 
+			[ 1425254400000 , 85000] , 
+			[ 1427932800000 , 55000] , 
+			[ 1430524800000 , 45000] , 
+			[ 1433203200000 , 42000] , 
+			[ 1435795200000 , 56500] , 
+			[ 1438473600000 , 45500] , 
+			[ 1441152000000 , 50000]]
+        } ,
+		
+		 {
+            "key" : "External Transfer" ,
+            "values" : [ [ 1406937600000 , 65000] , 
+			[ 1409616000000 , 75000] , 
+			[ 1412208000000 , 85000] , 
+			[ 1414886400000 , 65000] , 
+			[ 1417478400000 , 62500] , 
+			[ 1420156800000 , 55500] , 
+			[ 1422835200000 , 62000] , 
+			[ 1425254400000 , 75400] , 
+			[ 1427932800000 , 62000] , 
+			[ 1430524800000 , 45500] , 
+			[ 1433203200000 , 55600] , 
+			[ 1435795200000 , 75007] , 
+			[ 1438473600000 , 62520] , 
+			[ 1441152000000 , 70251]]
+        }
+
+    ];
+
+    var colors = d3.scale.category20();
+
+    var chart;
+    nv.addGraph(function() {
+        chart = nv.models.stackedAreaChart()
+            .useInteractiveGuideline(true)
+            .interpolate("step")
+            .x(function(d) { return d[0] })
+            .y(function(d) { return d[1] })
+            .controlLabels({stacked: "Stacked"})
+            //.margin({left: 100}) 
+            //.margin({right: 100}) 
+			//.padData(true)
+			//.yDomain([0,3250000])
+            .duration(300);
+
+        chart.xAxis
+			//.ticks(10)
+			//.staggerLabels(true) 
+			.tickFormat(function(d) { return d3.time.format('%b-%y')(new Date(d)) });
+			
+		chart.xScale(d3.time.scale());
+		
+        chart.yAxis
+			.axisLabelDistance(-10)
+			.axisLabel('NLU Statistics')
+			//.ticks(8)
+			.tickFormat(d3.format('.3s'));
+			
+			//Example of how to customize the tooltip.
+		chart.interactiveLayer
+			.tooltip
+			.headerFormatter(function(d) {return "Date: " + d3.time.format('%b-%d')(new Date(d));})
+			//.valueFormatter(d3.format(',.2f'));
+			
+			
+        chart.legend.vers('furious');
+
+        d3.select('#chart1')
+            .datum(histcatexplong)
+            .transition().duration(1000)
+            .call(chart)
+            .each('start', function() {
+                setTimeout(function() {
+                    d3.selectAll('#chart1 *').each(function() {
+                        if(this.__transition__)
+                            this.__transition__.duration = 1;
+                    })
+                }, 0)
+            });
+
+        nv.utils.windowResize(chart.update);
+        return chart;
+    });
+
+
+</script>
+</body>
+</html>

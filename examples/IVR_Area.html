@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="../build/nv.d3.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+    <script src="../build/nv.d3.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        text {
+            font: 12px Lato;
+        }
+        svg {
+            display: block;
+        }
+        html, body, svg {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class='with-3d-shadow with-transitions'>
+
+<svg id="chart1"></svg>
+
+<script>
+
+    var histcatexplong = [
+        {
+            "key" : "ASP Resolved" ,
+            "values" : [ [ 1406937600000 , 600000] , 
+			[ 1409616000000 , 500000] , 
+			[ 1412208000000 , 1200000] , 
+			[ 1414886400000 , 1280000] , 
+			[ 1417478400000 , 1120000] , 
+			[ 1420156800000 , 1500000] , 
+			[ 1422835200000 , 2400000] , 
+			[ 1425254400000 , 2500000] , 
+			[ 1427932800000 , 1800500] , 
+			[ 1430524800000 , 900000] , 
+			[ 1433203200000 , 1200000] , 
+			[ 1435795200000 , 955600] , 
+			[ 1438473600000 , 605000] , 
+			[ 1441152000000 , 1500500]]
+        } ,
+		
+		 {
+            "key" : "Agent" ,
+            "values" : [ [ 1406937600000 , 700000] , 
+			[ 1409616000000 , 650000] , 
+			[ 1412208000000 , 600000] , 
+			[ 1414886400000 , 550000] , 
+			[ 1417478400000 , 380000] , 
+			[ 1420156800000 , 250000] , 
+			[ 1422835200000 , 480000] , 
+			[ 1425254400000 , 380000] , 
+			[ 1427932800000 , 258000] , 
+			[ 1430524800000 , 600000] , 
+			[ 1433203200000 , 750000] , 
+			[ 1435795200000 , 850000] , 
+			[ 1438473600000 , 905000] , 
+			[ 1441152000000 , 645000]]
+        } ,
+		
+		 {
+            "key" : "NLU Resolved" ,
+            "values" : [ [ 1406937600000 , 158000] , 
+			[ 1409616000000 , 112000] , 
+			[ 1412208000000 , 115000] , 
+			[ 1414886400000 , 110000] , 
+			[ 1417478400000 , 150000] , 
+			[ 1420156800000 , 160000] , 
+			[ 1422835200000 , 170000] , 
+			[ 1425254400000 , 140000] , 
+			[ 1427932800000 , 120000] , 
+			[ 1430524800000 , 108000] , 
+			[ 1433203200000 , 118000] , 
+			[ 1435795200000 , 120000] , 
+			[ 1438473600000 , 130000] , 
+			[ 1441152000000 , 135000]]
+
+
+        },
+		 {
+            "key" : "MOIA Resolved" ,
+            "values" : [ [ 1406937600000 , 14000] , 
+			[ 1409616000000 , 17000] , 
+			[ 1412208000000 , 35000] , 
+			[ 1414886400000 , 22000] , 
+			[ 1417478400000 , 21000] , 
+			[ 1420156800000 , 23000] , 
+			[ 1422835200000 , 55000] , 
+			[ 1425254400000 , 22000] , 
+			[ 1427932800000 , 18000] , 
+			[ 1430524800000 , 13000] , 
+			[ 1433203200000 , 12000] , 
+			[ 1435795200000 , 15000] , 
+			[ 1438473600000 , 10000] , 
+			[ 1441152000000 , 12000]]
+        }
+    ];
+
+    var colors = d3.scale.category20();
+
+    var chart;
+    nv.addGraph(function() {
+        chart = nv.models.stackedAreaChart()
+            .useInteractiveGuideline(true)
+            .x(function(d) { return d[0] })
+            .y(function(d) { return d[1] })
+            //.interpolate("cardinal")
+            .controlLabels({stacked: "Stacked"})
+            //.margin({left: 100}) 
+            //.margin({right: 100}) 
+			//.padData(true)
+			//.yDomain([0,3250000])
+            .duration(300);
+
+        chart.xAxis
+			//.ticks(10)
+			//.staggerLabels(true) 
+			.tickFormat(function(d) { return d3.time.format('%b-%y')(new Date(d)) });
+			
+		chart.xScale(d3.time.scale());
+		
+        chart.yAxis
+			.axisLabel('IVR Statistics')
+			.axisLabelDistance(-10)
+			.ticks(8)
+			.tickFormat(d3.format('.3s'));
+			
+			chart.interactiveLayer
+			.tooltip
+			.headerFormatter(function(d) {return "Date: " + d3.time.format('%b-%d')(new Date(d));})
+			//.valueFormatter(d3.format(',.2f'));
+			
+			
+
+
+        chart.legend.vers('furious');
+
+        d3.select('#chart1')
+            .datum(histcatexplong)
+            .transition().duration(1000)
+            .call(chart)
+            .each('start', function() {
+                setTimeout(function() {
+                    d3.selectAll('#chart1 *').each(function() {
+                        if(this.__transition__)
+                            this.__transition__.duration = 1;
+                    })
+                }, 0)
+            });
+
+        nv.utils.windowResize(chart.update);
+        return chart;
+    });
+
+
+</script>
+</body>
+</html>

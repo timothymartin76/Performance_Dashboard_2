@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="../build/nv.d3.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+    <script src="../build/nv.d3.js"></script>
+    <script src="lib/stream_layers.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        text {
+            font: 14px Lato;
+        }
+        svg {
+            display: block;
+        }
+        html, body, #chart1, svg {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div id="chart1" class='with-3d-shadow with-transitions'>
+    <svg></svg>
+</div>
+
+<script>
+
+       var long_short_data = [
+        {
+            key: 'Service Level T1',
+            values: [              
+                {
+                    "label" : "Oct-14" ,
+					"color" : "#1f77b4",
+                    "value" : 0.885
+                } ,
+                {
+                    "label" : "Nov-14" ,
+					"color" : "#1f77b4",
+                    "value" : 0.825
+
+                } ,
+                {
+                    "label" : "Dec-14" ,
+					"color" : "#1f77b4",
+                    "value" : 0.9225
+                } ,
+                {
+                    "label" : "Jan-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.9150
+                } ,
+                {
+                    "label" : "Feb-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.7586
+                } ,
+                {
+                    "label" : "Mar-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.665
+                } ,
+                {
+                    "label" : "Apr-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.645
+                },
+				 {
+                    "label" : "May-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.698
+                },
+				 {
+                    "label" : "Jun-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.725
+                },
+				 {
+                    "label" : "Jul-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.799
+                },
+				 {
+                    "label" : "Aug-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.845
+                },
+				 {
+                    "label" : "Sep-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.886
+                },
+				 {
+                    "label" : "Oct-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.876
+                },
+				{
+                    "label" : "Nov-15" ,
+					"color" : "#1f77b4",
+                    "value" : 0.842
+                }
+            ]
+        },
+        {
+            key: 'T1 & T2',
+            values: [              
+                {
+                    "label" : "Oct-14" ,
+					"color" : "#aec7e8",
+                    "value" : 0.9025
+                } ,
+                {
+                    "label" : "Nov-14" ,
+					"color" : "#aec7e8",
+                    "value" : 0.856
+                } ,
+                {
+                    "label" : "Dec-14" ,
+					"color" : "#aec7e8",
+                    "value" : 0.885
+                } ,
+                {
+                    "label" : "Jan-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.754
+                } ,
+                {
+                    "label" : "Feb-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.745
+                } ,
+                {
+                    "label" : "Mar-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.669
+                } ,
+                {
+                    "label" : "Apr-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.662
+                },
+				 {
+                    "label" : "May-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.645
+                },
+				 {
+                    "label" : "Jun-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.754
+                },
+				 {
+                    "label" : "Jul-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.772
+                },
+				 {
+                    "label" : "Aug-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.789
+                },
+				 {
+                    "label" : "Sep-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.821
+                },
+				 {
+                    "label" : "Oct-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.835
+                },
+				{
+                    "label" : "Nov-15" ,
+					"color" : "#aec7e8",
+                    "value" : 0.889
+                }				
+            ]
+        }
+    ];
+
+
+    var chart;
+    nv.addGraph(function() {
+        chart = nv.models.multiBarChart()
+            .x(function(d) { return d.label })
+            .y(function(d) { return d.value })
+            //.yErr(function(d) { return [-Math.abs(d.value * Math.random() * 0.3), Math.abs(d.value * Math.random() * 0.3)] })
+            //.barColor(d3.scale.category20().range())
+            .duration(250)
+            .forceY([.5, 1])
+			.showControls(false) //Allow user to switch between "Grouped" and "Stacked" mode.
+			//.showValues(true)
+            //.margin({left: 100}) 
+            //.margin({right: 100}) 
+            .stacked(false);
+
+        chart.yAxis.tickFormat(d3.format('.0%'));
+
+        chart.yAxis
+			.axisLabelDistance(-10)
+			.axisLabel('SL Monthly');
+			
+			
+        chart.xAxis
+			//.ticks(20)
+			.axisLabel('')
+			.axisLabelDistance(20);
+
+
+
+        d3.select('#chart1 svg')
+            .datum(long_short_data)
+            .call(chart);
+
+        nv.utils.windowResize(chart.update);
+
+        chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
+        chart.state.dispatch.on('change', function(state){
+            nv.log('state', JSON.stringify(state));
+        });
+        return chart;
+    });
+
+</script>
+</body>
+</html>
