@@ -39,7 +39,7 @@
 			//.interpolate("cardinal")
             .x(function(d) { return d[0] })
             .y(function(d) { return d[1] })
-			.yDomain([5000,17000])
+			//.yDomain([5000,17000])
             .color(d3.scale.category10().range())
 
             .duration(300)
@@ -54,7 +54,7 @@
 
         chart.yAxis
 			.axisLabelDistance(-10)
-			.axisLabel('# Inspections')
+			.axisLabel('')
 			//.ticks(8)
 			.tickFormat(d3.format(''));
 	    
@@ -86,7 +86,7 @@
     function cumulativeTestData() {
         return [
             {
-            "key" : "Accela-Main" ,
+            "key" : "Accela-1" ,
             "values" : [ 
 			[ 1483574400000 , 12932] , 
 			[ 1486252800000 , 10360] , 
@@ -103,7 +103,7 @@
         } ,
 		
 		 {
-            "key" : "Accela-TA" ,
+            "key" : "Accela-2" ,
             "values" : [ 			 
 			[ 1483574400000 , 10693] , 
 			[ 1486252800000 , 8240] , 
@@ -120,7 +120,7 @@
         } ,
 		
 		 {
-            "key" : "Accela-Dashboard" ,
+            "key" : "Accela-3" ,
             "values" : [		 
 			[ 1483574400000 , 10195] , 
 			[ 1486252800000 , 7997] , 
